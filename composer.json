@@ -1,0 +1,42 @@
+{
+    "name": "guardsmanpanda/larabear-auth",
+    "description": "Bear keep bad people out.",
+    "keywords": [
+        "guardsmanpanda",
+        "larabear"
+    ],
+    "homepage": "https://github.com/guardsmanpanda/larabear-auth",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Bjørn Dons",
+            "email": "guardsmanpanda@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-pdo": "*",
+        "illuminate/console": "^v8.83.12 || ^9.16",
+        "illuminate/database": "^v8.83.12 || ^9.16",
+        "illuminate/encryption": "^v8.83.12 || ^9.16",
+        "illuminate/http": "^v8.83.12 || ^9.16",
+        "illuminate/support": "^v8.83.12 || ^9.16",
+        "guardsmanpanda/larabear": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "GuardsmanPanda\\LarabearAuth\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    },
+    "scripts": {
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
