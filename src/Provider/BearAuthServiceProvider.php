@@ -9,7 +9,7 @@ class BearAuthServiceProvider extends ServiceProvider {
         if ($this->app->runningInConsole()) {
             $this->commands(commands: [
             ]);
-            $this->loadMigrationsFrom(paths: [ __DIR__.'/../Migration']);
+            $this->loadMigrationsFrom(paths: [__DIR__ . '/../Migration']);
         }
     }
 }

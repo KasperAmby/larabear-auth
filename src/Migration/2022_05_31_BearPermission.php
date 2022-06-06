@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->text(column: 'permission_slug')->primary();
                 $table->text(column: 'permission_name');
                 $table->text(column: 'permission_description')->nullable();
-            }   else {
+            } else {
                 $table->string(column: 'permission_slug')->primary();
                 $table->string(column: 'permission_name');
                 $table->string(column: 'permission_description')->nullable();

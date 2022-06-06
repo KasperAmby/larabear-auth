@@ -13,19 +13,19 @@ return new class extends Migration {
             throw new RuntimeException(message: 'bear.user_table is not configured, run "php artisan bear" to fix this problem.');
         }
 
-        Schema::create(table: 'bear_user_role', callback: static function (Blueprint $table)  use ($config): void {
+        Schema::create(table: 'bear_user_role', callback: static function (Blueprint $table) use ($config): void {
             if ($config['primary_key_type'] === 'uuid') {
                 $table->uuid(column: 'user_id')->nullable();
             } else if ($config['primary_key_type'] === 'biginteger') {
                 $table->bigInteger(column: 'user_id')->unsigned()->nullable();
-            }else if ($config['primary_key_type'] === 'integer') {
+            } else if ($config['primary_key_type'] === 'integer') {
                 $table->integer(column: 'user_id')->unsigned()->nullable();
             } else {
                 $table->text(column: 'user_id')->nullable();
             }
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'role_slug');
-            }   else {
+            } else {
                 $table->string(column: 'role_slug');
             }
             $table->timestampTz(column: 'created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

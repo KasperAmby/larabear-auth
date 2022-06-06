@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->text(column: 'role_slug')->primary();
                 $table->text(column: 'role_name');
                 $table->text(column: 'role_description')->nullable();
-            }   else {
+            } else {
                 $table->string(column: 'role_slug')->primary();
                 $table->string(column: 'role_name');
                 $table->string(column: 'role_description')->nullable();

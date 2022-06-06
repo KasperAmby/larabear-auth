@@ -11,7 +11,7 @@ return new class extends Migration {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'role_slug');
                 $table->text(column: 'permission_slug');
-            }   else {
+            } else {
                 $table->string(column: 'role_slug');
                 $table->string(column: 'permission_slug');
             }

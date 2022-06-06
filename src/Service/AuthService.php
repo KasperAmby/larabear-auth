@@ -12,6 +12,7 @@ class AuthService {
     public static function id(): string|int|null {
         return self::$userId;
     }
+
     public static function getUserId(): string|int|null {
         return self::$userId;
     }
@@ -29,7 +30,7 @@ class AuthService {
             $perms = DB::select(query: "
                 SELECT DISTINCT p.permission_slug
                 FROM bear_user_permission up
-                LEFT JOIN bear_permission p ON p.permission_slug up.permission_slug
+                LEFT JOIN bear_permission p ON p.permission_slug = up.permission_slug
                 WHERE up.user_id = ?
                 UNION DISTINCT
                 SELECT DISTINCT p.permission_slug
