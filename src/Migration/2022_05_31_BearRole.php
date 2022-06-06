@@ -10,11 +10,13 @@ return new class extends Migration {
         Schema::create(table: 'bear_role', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'role_slug')->primary();
+                $table->text(column: 'role_name');
+                $table->text(column: 'role_description')->nullable();
             }   else {
                 $table->string(column: 'role_slug')->primary();
+                $table->string(column: 'role_name');
+                $table->string(column: 'role_description')->nullable();
             }
-            $table->text(column: 'role_name');
-            $table->text(column: 'role_description')->nullable();
             $table->timestampTz(column: 'created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestampTz(column: 'updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrentOnUpdate();
         });

@@ -3,8 +3,8 @@
 namespace GuardsmanPanda\LarabearAuth\Middleware;
 
 use Closure;
-use GuardsmanPanda\Larabear\Crud\SecurityIncidentCreator;
-use GuardsmanPanda\Larabear\Enum\SecurityIncidentSeverityEnum;
+use GuardsmanPanda\Larabear\Crud\BearSecurityIncidentCreator;
+use GuardsmanPanda\Larabear\Enum\BearSecurityIncidentSeverityEnum;
 use GuardsmanPanda\Larabear\Service\Req;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,9 +32,9 @@ class BearTokenAuthMiddleware {
         //if access token is not valid, abort
         if ($access === null || $access->id === null) {
             $message = 'The supplied access token is not valid.. ip: ' . Req::ip() . ', country: ' . Req::ipCountry() . ', path: ' .  Req::path() . ', hashed_token: ' . self::$hashed_access_token;
-            SecurityIncidentCreator::create(
+            BearSecurityIncidentCreator::create(
                 namespace: 'bear-token-auth',
-                severity: SecurityIncidentSeverityEnum::HIGH,
+                severity: BearSecurityIncidentSeverityEnum::HIGH,
                 headline: 'Invalid access token',
                 description: $message,
                 remediation: 'Check the system making the call, if it is not under your control then consider blacklisting the IP address.',

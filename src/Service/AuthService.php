@@ -12,6 +12,9 @@ class AuthService {
     public static function id(): string|int|null {
         return self::$userId;
     }
+    public static function getUserId(): string|int|null {
+        return self::$userId;
+    }
 
     public static function setUserId(string|int|null $userId): void {
         self::$userId = $userId;
@@ -25,17 +28,17 @@ class AuthService {
         if (self::$permissions === null) {
             $perms = DB::select(query: "
                 SELECT DISTINCT p.permission_slug
-                FROM permission_user pu
-                LEFT JOIN bear_permission p ON p.id = pu.permission_id
-                WHERE pu.user_id = ?
+                FROM bear_user_permission up
+                LEFT JOIN bear_permission p ON p.permission_slug up.permission_slug
+                WHERE up.user_id = ?
                 UNION DISTINCT
                 SELECT DISTINCT p.permission_slug
-                FROM role_user ru
-                LEFT JOIN bear_role_permission rp on rp.permission_slug = ru.role_id
+                FROM bear_user_role ur
+                LEFT JOIN bear_role_permission rp on rp.role_slug = ur.role_slug
                 LEFT JOIN bear_permission p on p.permission_slug = rp.permission_slug
-                WHERE ru.user_id = ?
+                WHERE ur.user_id = ?
             ", bindings: [self::$userId, self::$userId]);
-            self::$permissions = array_column(array: $perms, column_key: 'slug');
+            self::$permissions = array_column(array: $perms, column_key: 'permission_slug');
         }
         if (is_string(value: $permission)) {
             $permission = explode(separator: '|', string: $permission);
@@ -57,10 +60,10 @@ class AuthService {
             $tmp = DB::select(query: "
                     SELECT r.role_slug
                     FROM bear_role r
-                    JOIN role_user ru ON ru.role_id = r.id
-                    WHERE ru.user_id = ?
+                    JOIN bear_user_role ur ON ur.role_slug = r.role_slug
+                    WHERE ur.user_id = ?
             ", bindings: [self::$userId]);
-            self::$roles = array_column(array: $tmp, column_key: 'slug');
+            self::$roles = array_column(array: $tmp, column_key: 'role_slug');
         }
         if (is_string(value: $role)) {
             $role = explode(separator: '|', string: $role);

@@ -10,14 +10,20 @@ return new class extends Migration {
         Schema::create(table: 'bear_access_token', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
+                $table->text(column: 'api_route_prefix')->default('');
+                $table->text(column: 'api_primary_key')->nullable();
             }   else {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
+                $table->string(column: 'api_route_prefix')->default('');
+                $table->string(column: 'api_primary_key')->nullable();
             }
-            $table->text(column: 'api_route_prefix')->default('');
-            $table->text(column: 'api_primary_key')->nullable();
             $table->ipAddress(column: 'ip_restriction')->default('0.0.0.0/0');
             $table->timestampTz(column: 'expires_at')->nullable();
-            $table->text(column: 'hashed_access_token')->unique();
+            if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
+                $table->text(column: 'hashed_access_token')->index();
+            } else {
+                $table->string(column: 'hashed_access_token')->index();
+            }
             $table->integer(column: 'usage_count')->default(0);
             $table->timestampTz(column: 'last_usage_at')->nullable();
             $table->integer(column: 'delete_get_request_log_after_days')->nullable();
