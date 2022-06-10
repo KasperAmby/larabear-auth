@@ -25,7 +25,7 @@ class BearAccessTokenAuthMiddleware {
             FROM bear_access_token at
             WHERE
                 at.hashed_access_token = ? AND ? <<= at.request_ip_restriction
-                AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?)) 
+                AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?) 
                 AND starts_with(?, at.api_route_prefix)
         ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
 
