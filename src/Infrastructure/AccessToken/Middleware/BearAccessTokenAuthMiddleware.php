@@ -54,7 +54,7 @@ class BearAccessTokenAuthMiddleware {
         DB::insert("
             INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(Req::allQuery(), JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
+            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(value: Req::allQuery(allowEmpty: true), flags: JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
         );
     }
 }
