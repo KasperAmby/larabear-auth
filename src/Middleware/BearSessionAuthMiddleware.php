@@ -21,7 +21,7 @@ class BearSessionAuthMiddleware {
         $this->config = Config::get(key: 'session');
     }
 
-    public function handle(Request $request, Closure $next) {
+    public function handle(Request $request, Closure $next, string $extra = null) {
         $session = $this->manager->driver();
         $session->setId($request->cookies->get(key: $this->config['cookie']));
         $this->startSession(request: $request, session: $session);

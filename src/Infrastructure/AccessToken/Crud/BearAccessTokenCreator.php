@@ -17,7 +17,7 @@ class BearAccessTokenCreator {
         $token = new BearAccessToken();
         $token->api_route_prefix = $api_route_prefix;
         $token->api_primary_key = $api_primary_key;
-        $token->hashed_access_token = hash('xxh128', $access_token);
+        $token->hashed_access_token = hash(algo: 'xxh128', data: $access_token);
         $token->access_token_comment = $access_token_comment;
         $token->ip_restriction = $ip_restriction;
         $token->expires_at = $expires_at;
