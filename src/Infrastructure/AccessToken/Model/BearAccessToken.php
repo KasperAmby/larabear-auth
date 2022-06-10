@@ -38,12 +38,13 @@ use Illuminate\Database\Query\Builder;
  * @property int $delete_all_request_log_after_days
  * @property int $delete_get_request_log_after_days
  * @property string $id
- * @property string $ip_restriction
  * @property string $api_primary_key
  * @property string $api_route_prefix
  * @property string $created_by_user_id
  * @property string $hashed_access_token
+ * @property string $request_ip_restriction
  * @property string $access_token_comment
+ * @property string $server_hostname_restriction
  * @property CarbonInterface $created_at
  * @property CarbonInterface $expires_at
  * @property CarbonInterface $last_usage_at
