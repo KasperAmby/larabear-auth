@@ -24,9 +24,10 @@ class BearAccessTokenAuthMiddleware {
             SELECT at.id, at.api_primary_key, at.expires_at
             FROM bear_access_token at
             WHERE
-                at.hashed_access_token = ? AND ? <<= at.ip_restriction 
+                at.hashed_access_token = ? AND ? <<= at.request_ip_restriction
+                AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?)) 
                 AND starts_with(?, at.api_route_prefix)
-        ", [$hashed_access_token, Req::ip(), Req::path()]);
+        ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
 
         //if access token is not valid, abort
         if ($access === null || $access->id === null) {
