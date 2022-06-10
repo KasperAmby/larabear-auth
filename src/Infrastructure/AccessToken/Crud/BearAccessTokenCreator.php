@@ -1,7 +1,9 @@
 <?php
 
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Crud;
+
 use Carbon\CarbonInterface;
-use GuardsmanPanda\LarabearAuth\Model\BearAccessToken;
+use GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Model\BearAccessToken;
 
 class BearAccessTokenCreator {
     public static function create(

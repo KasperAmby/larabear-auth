@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Model;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Model;
 
 use Carbon\CarbonInterface;
 use Closure;

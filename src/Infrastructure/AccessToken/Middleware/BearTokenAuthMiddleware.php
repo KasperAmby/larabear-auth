@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Middleware;
 
 use Closure;
 use GuardsmanPanda\Larabear\Enum\BearSeverityEnum;
