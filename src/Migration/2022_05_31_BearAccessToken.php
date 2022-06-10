@@ -12,12 +12,14 @@ return new class extends Migration {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
                 $table->text(column: 'api_route_prefix')->default('');
                 $table->text(column: 'api_primary_key')->nullable();
+                $table->text(column: 'server_hostname_restriction')->nullable();
             } else {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
                 $table->string(column: 'api_route_prefix')->default('');
                 $table->string(column: 'api_primary_key')->nullable();
+                $table->string(column: 'server_hostname_restriction')->nullable();
             }
-            $table->ipAddress(column: 'ip_restriction')->default('0.0.0.0/0');
+            $table->ipAddress(column: 'request_ip_restriction')->default('0.0.0.0/0');
             $table->text(column: 'access_token_comment');
             $table->timestampTz(column: 'expires_at')->nullable();
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {

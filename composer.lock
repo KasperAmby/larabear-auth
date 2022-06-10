@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a19220d4dfa43e9e016c8b647a81c01",
+    "content-hash": "ee6b917869a7e48382ebd076322abd6c",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -174,12 +174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GuardsmanPanda/larabear.git",
-                "reference": "47499940d6e9a4328a3222108333525b597f9e7a"
+                "reference": "c07eb36e519e55288afb81f621a6925d6249cc48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GuardsmanPanda/larabear/zipball/47499940d6e9a4328a3222108333525b597f9e7a",
-                "reference": "47499940d6e9a4328a3222108333525b597f9e7a",
+                "url": "https://api.github.com/repos/GuardsmanPanda/larabear/zipball/c07eb36e519e55288afb81f621a6925d6249cc48",
+                "reference": "c07eb36e519e55288afb81f621a6925d6249cc48",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 "issues": "https://github.com/GuardsmanPanda/larabear/issues",
                 "source": "https://github.com/GuardsmanPanda/larabear/tree/main"
             },
-            "time": "2022-06-10T07:50:32+00:00"
+            "time": "2022-06-10T11:08:09+00:00"
         },
         {
             "name": "illuminate/collections",

@@ -24,13 +24,13 @@ class BearAccessTokenAuthMiddleware {
             SELECT at.id, at.api_primary_key, at.expires_at
             FROM bear_access_token at
             WHERE
-                at.hashed_access_token = ? AND ? <<= at.ip_restriction
+                at.hashed_access_token = ? AND ? <<= at.ip_restriction 
                 AND starts_with(?, at.api_route_prefix)
         ", [$hashed_access_token, Req::ip(), Req::path()]);
 
         //if access token is not valid, abort
         if ($access === null || $access->id === null) {
-            $message = 'The supplied access token is not valid.. ip: ' . Req::ip() . ', country: ' . Req::ipCountry() . ', path: ' . Req::path() . ', hashed_token: ' . $hashed_access_token;
+            $message = 'The supplied access token is not valid.. ip: ' . Req::ip() . ', country: ' . Req::ipCountry() . ', path: ' . Req::path() . ', hostname: '. Req::hostname() . ', hashed_token: ' . $hashed_access_token;
             BearSecurityIncidentCreator::create(
                 namespace: 'bear-token-auth',
                 severity: BearSeverityEnum::HIGH,
@@ -51,9 +51,9 @@ class BearAccessTokenAuthMiddleware {
             $time = (int)((microtime(as_float: true) - get_defined_constants()['LARAVEL_START']) * 1000);
         }
         DB::insert("
-            INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(Req::allQuery(), JSON_THROW_ON_ERROR), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
+            INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(Req::allQuery(), JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
         );
     }
 }
