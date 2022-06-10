@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class BearTokenAuthMiddleware {
+class BearAccessTokenAuthMiddleware {
     public static string|null $primary_api_key = null;
     private static string|null $access_token_id = null;
 
