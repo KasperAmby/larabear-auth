@@ -12,6 +12,7 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class BearSessionAuthMiddleware {
     public string|int|null $userId = null;
@@ -26,6 +27,11 @@ class BearSessionAuthMiddleware {
         $session->setId($request->cookies->get(key: $this->config['cookie']));
         $this->startSession(request: $request, session: $session);
         $this->userId = $session->get(key: 'logged_in_user_id');
+
+        if ($this->userId === null && $extra !== 'allow-guest') {
+            return new RedirectResponse(url: '/', headers: ['HX-Redirect' => '/']);
+        }
+
         AuthService::setUserId(userId: $this->userId);
 
         $response = $next($request);

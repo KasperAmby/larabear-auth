@@ -15,8 +15,8 @@ class BearRoleMiddleware {
         $result = AuthService::hasRole(role: $role);
         if ($result !== true) {
             BearSecurityIncidentCreator::create(
-                namespace: 'role-middleware',
                 severity: BearSeverityEnum::MEDIUM,
+                namespace: 'role-middleware',
                 headline: 'Role Check Failed',
                 description: 'User tried to access a resource that requires a role that the user does not have.',
                 remediation: "You either need to add the role to the user or remove the role from the resource. (But only if  the user is supposed to access this resource.)",

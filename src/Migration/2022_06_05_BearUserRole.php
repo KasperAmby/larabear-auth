@@ -18,8 +18,8 @@ return new class extends Migration {
             BearMigrationService::buildUserReferencingColumn(
                 table: $table,
                 columnName: 'user_id',
-                userTableName: $config['name'],
-                userTableColumnName: $config['column'],
+                userTableName: $config['table_name'],
+                userTableColumnName: $config['primary_key_column'],
                 columnType: $config['primary_key_type'],
             );
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {

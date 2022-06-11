@@ -13,7 +13,7 @@ use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class BearAccessTokenAuthMiddleware {
+class BearApplicationAccessTokenMiddleware {
     public static string|null $primary_api_key = null;
     private static string|null $access_token_id = null;
 

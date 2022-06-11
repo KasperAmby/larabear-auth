@@ -15,8 +15,8 @@ class BearPermissionMiddleware {
         $result = AuthService::hasPermission(permission: $permission);
         if ($result !== true) {
             BearSecurityIncidentCreator::create(
-                namespace: 'permission-middleware',
                 severity: BearSeverityEnum::MEDIUM,
+                namespace: 'permission-middleware',
                 headline: 'Permission Check Failed',
                 description: 'User tried to access a resource that requires a permission that the user does not have.',
                 remediation: "You either need to add the permission to the user or remove the permission from the resource. (But only if  the user is supposed to access this resource.)",
