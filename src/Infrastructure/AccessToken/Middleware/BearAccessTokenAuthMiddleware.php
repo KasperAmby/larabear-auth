@@ -8,6 +8,8 @@ use GuardsmanPanda\Larabear\Infrastructure\Http\Service\Req;
 use GuardsmanPanda\Larabear\Infrastructure\Security\Crud\BearSecurityIncidentCreator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -47,14 +49,27 @@ class BearAccessTokenAuthMiddleware {
     }
 
     public function terminate(Request $request, Response $response): void {
-        $time = 0;
+        $status_code = $response->getStatusCode();
+
+        $time = -1;
         if (defined(constant_name: 'LARAVEL_START')) {
             $time = (int)((microtime(as_float: true) - get_defined_constants()['LARAVEL_START']) * 1000);
         }
+
+        $query_json = null;
+        if ($status_code >= 400) {
+            try {
+                $query = Req::allQueryData(allowEmpty: true);
+                $query_json = empty($query) ? null : json_encode(value: $query, flags: JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                Log::error(message: 'Failed to encode query parameters: ' . $e->getMessage());
+            }
+        }
+
         DB::insert("
             INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(value: Req::allQueryData(allowEmpty: true), flags: JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
+            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), $query_json, Req::hostname(), $status_code, $status_code >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
         );
     }
 }
