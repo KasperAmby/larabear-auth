@@ -33,8 +33,8 @@ class BearAccessTokenAuthMiddleware {
         if ($access === null || $access->id === null) {
             $message = 'The supplied access token is not valid.. ip: ' . Req::ip() . ', country: ' . Req::ipCountry() . ', path: ' . Req::path() . ', hostname: '. Req::hostname() . ', hashed_token: ' . $hashed_access_token;
             BearSecurityIncidentCreator::create(
-                namespace: 'bear-token-auth',
                 severity: BearSeverityEnum::HIGH,
+                namespace: 'bear-token-auth',
                 headline: 'Invalid access token',
                 description: $message,
                 remediation: 'Check the system making the call, if it is not under your control then consider blacklisting the IP address.',
@@ -54,7 +54,7 @@ class BearAccessTokenAuthMiddleware {
         DB::insert("
             INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(value: Req::allQuery(allowEmpty: true), flags: JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
+            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), json_encode(value: Req::allQueryData(allowEmpty: true), flags: JSON_THROW_ON_ERROR), Req::hostname(), $response->getStatusCode(), $response->getStatusCode() >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
         );
     }
 }
