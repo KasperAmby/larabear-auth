@@ -174,12 +174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GuardsmanPanda/larabear.git",
-                "reference": "04d57ee16d4d6d2dc1c4127b7e26881c73dda37a"
+                "reference": "bdab1053f68ff76b14a48a77b82040e61e48b472"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GuardsmanPanda/larabear/zipball/04d57ee16d4d6d2dc1c4127b7e26881c73dda37a",
-                "reference": "04d57ee16d4d6d2dc1c4127b7e26881c73dda37a",
+                "url": "https://api.github.com/repos/GuardsmanPanda/larabear/zipball/bdab1053f68ff76b14a48a77b82040e61e48b472",
+                "reference": "bdab1053f68ff76b14a48a77b82040e61e48b472",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 "issues": "https://github.com/GuardsmanPanda/larabear/issues",
                 "source": "https://github.com/GuardsmanPanda/larabear/tree/main"
             },
-            "time": "2022-06-11T07:21:44+00:00"
+            "time": "2022-06-11T17:35:52+00:00"
         },
         {
             "name": "illuminate/collections",

@@ -18,10 +18,12 @@ return new class extends Migration {
             $table->integer(column: 'response_status_code');
             $table->text(column: 'response_body')->nullable();
             $table->integer(column: 'response_time_in_milliseconds');
-            $table->uuid(column: 'access_token_id')->nullable();
+            $table->uuid(column: 'application_access_token_id')->nullable();
+            $table->uuid(column: 'user_access_token_id')->nullable();
             $table->boolean(column: 'is_processed')->default(false);
             $table->timestampTz(column: 'created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->foreign('access_token_id')->references('id')->on('bear_access_token');
+            $table->foreign('application_access_token_id')->references('id')->on('bear_application_access_token');
+            $table->foreign('user_access_token_id')->references('id')->on('bear_user_access_token');
         });
     }
 
