@@ -1,10 +1,10 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Http\Middleware;
 
 use Carbon\Carbon;
 use Closure;
-use GuardsmanPanda\LarabearAuth\Service\AuthService;
+use GuardsmanPanda\LarabearAuth\Infrastrcuture\Auth\Service\AuthService;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class BearSessionAuthMiddleware {
+abstract class BearSessionAuthMiddleware {
     public string|int|null $userId = null;
     private array $config;
 
@@ -32,7 +32,10 @@ class BearSessionAuthMiddleware {
             return new RedirectResponse(url: '/', headers: ['HX-Redirect' => '/']);
         }
 
-        AuthService::setUserId(userId: $this->userId);
+        if ($this->userId !== null) {
+            AuthService::setUserId(userId: $this->userId);
+            $this->setLoggedInUser(userId: $this->userId);
+        }
 
         $response = $next($request);
 
@@ -61,4 +64,6 @@ class BearSessionAuthMiddleware {
         }
         $this->view->share(key: 'errors', value: $request->session()->get(key: 'errors') ?? new ViewErrorBag);
     }
+
+    abstract protected function setLoggedInUser(string|int $userId): void;
 }

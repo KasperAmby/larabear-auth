@@ -1,7 +1,8 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Http\Middleware;
 
-class BearUserAccessTokenMiddleware {
+abstract class BearUserAccessTokenMiddleware {
 
+    abstract protected function setLoggedInUser(string|int $userId): void;
 }
