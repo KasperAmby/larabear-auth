@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Http\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 abstract class BearUserAccessTokenMiddleware {
 

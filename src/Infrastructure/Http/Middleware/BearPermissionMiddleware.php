@@ -1,11 +1,11 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Http\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 use Closure;
 use GuardsmanPanda\Larabear\Enum\BearSeverityEnum;
 use GuardsmanPanda\Larabear\Infrastructure\Security\Crud\BearSecurityIncidentCreator;
-use GuardsmanPanda\LarabearAuth\Infrastrcuture\Auth\Service\AuthService;
+use GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service\AuthService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

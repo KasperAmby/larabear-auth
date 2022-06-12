@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastructure\Infrastrcuture\Http\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Infrastructure\Http\Middleware;
 
 use Closure;
 use GuardsmanPanda\Larabear\Enum\BearSeverityEnum;

@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Auth\Service;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service;
 
 use Illuminate\Support\Facades\DB;
 

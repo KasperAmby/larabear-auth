@@ -1,10 +1,10 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastrcuture\Http\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 use Carbon\Carbon;
 use Closure;
-use GuardsmanPanda\LarabearAuth\Infrastrcuture\Auth\Service\AuthService;
+use GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service\AuthService;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Http\Request;
