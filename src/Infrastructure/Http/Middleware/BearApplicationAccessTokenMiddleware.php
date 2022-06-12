@@ -1,6 +1,6 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastructure\Infrastructure\Http\Middleware;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 use Closure;
 use GuardsmanPanda\Larabear\Enum\BearSeverityEnum;
@@ -24,7 +24,7 @@ class BearApplicationAccessTokenMiddleware {
         $hashed_access_token = hash(algo: 'xxh128', data: $request->bearerToken());
         $access = DB::selectOne("
             SELECT at.id, at.api_primary_key, at.expires_at
-            FROM bear_access_token at
+            FROM bear_application_access_token at
             WHERE
                 at.hashed_access_token = ? AND ? <<= at.request_ip_restriction
                 AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?) 
@@ -56,18 +56,8 @@ class BearApplicationAccessTokenMiddleware {
             $time = (int)((microtime(as_float: true) - get_defined_constants()['LARAVEL_START']) * 1000);
         }
 
-        $query_json = null;
-        if ($status_code >= 400) {
-            try {
-                $query = Req::allQueryData(allowEmpty: true);
-                $query_json = empty($query) ? null : json_encode(value: $query, flags: JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
-                Log::error(message: 'Failed to encode query parameters: ' . $e->getMessage());
-            }
-        }
-
         DB::insert("
-            INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, access_token_id)
+            INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, request_http_query, request_http_hostname, response_status_code, response_body, response_time_in_milliseconds, application_access_token_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), $query_json, Req::hostname(), $status_code, $status_code >= 400 ? $response->getContent() : null, $time, self::$access_token_id]
         );

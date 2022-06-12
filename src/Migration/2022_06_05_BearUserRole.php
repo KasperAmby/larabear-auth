@@ -21,6 +21,7 @@ return new class extends Migration {
                 userTableName: $config['table_name'],
                 userTableColumnName: $config['primary_key_column'],
                 columnType: $config['primary_key_type'],
+                nullable: false,
             );
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'role_slug');

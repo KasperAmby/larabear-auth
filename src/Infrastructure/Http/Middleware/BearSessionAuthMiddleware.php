@@ -4,6 +4,7 @@ namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 use Carbon\Carbon;
 use Closure;
+use GuardsmanPanda\Larabear\Infrastructure\Http\Service\Req;
 use GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service\AuthService;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -34,6 +35,7 @@ abstract class BearSessionAuthMiddleware {
 
         if ($this->userId !== null) {
             AuthService::setUserId(userId: $this->userId);
+            Req::setUserId(userId: $this->userId);
             $this->setLoggedInUser(userId: $this->userId);
         }
 

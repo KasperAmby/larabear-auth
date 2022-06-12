@@ -26,8 +26,10 @@ return new class extends Migration {
                 userTableName: $config['table_name'],
                 userTableColumnName: $config['primary_key_column'],
                 columnType: $config['primary_key_type'],
+                nullable: false,
             );
             $table->timestampTz(column: 'expires_at');
+            $table->integer(column: 'expiry_time_increment_in_minutes')->unsigned();
             $table->timestampTz(column: 'invalid_at');
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'hashed_access_token')->index();

@@ -13,10 +13,7 @@ return new class extends Migration {
             $table->text(column: 'request_country_code')->nullable();
             $table->text(column: 'request_http_method');
             $table->text(column: 'request_http_path');
-            $table->text(column: 'request_http_query')->nullable();
-            $table->text(column: 'request_http_hostname')->nullable();
             $table->integer(column: 'response_status_code');
-            $table->text(column: 'response_body')->nullable();
             $table->integer(column: 'response_time_in_milliseconds');
             $table->uuid(column: 'application_access_token_id')->nullable();
             $table->uuid(column: 'user_access_token_id')->nullable();
