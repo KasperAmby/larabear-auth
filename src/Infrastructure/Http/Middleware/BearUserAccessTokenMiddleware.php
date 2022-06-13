@@ -6,12 +6,10 @@ use Closure;
 use GuardsmanPanda\Larabear\Infrastructure\Http\Service\Req;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-abstract class BearUserAccessTokenMiddleware {
+class BearUserAccessTokenMiddleware {
     private static string|null $access_token_id = null;
 
     public function handle(Request $request, Closure $next) {
@@ -28,7 +26,6 @@ abstract class BearUserAccessTokenMiddleware {
         return $next($request);
     }
 
-    abstract protected function setLoggedInUser(string|int $userId): void;
 
     public function terminate(Request $request, Response $response): void {
         $status_code = $response->getStatusCode();

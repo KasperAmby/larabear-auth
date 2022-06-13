@@ -10,12 +10,13 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Http\Request;
 use Illuminate\Session\SessionManager;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-abstract class BearSessionAuthMiddleware {
+class BearSessionAuthMiddleware {
     public string|int|null $userId = null;
     private array $config;
 
@@ -29,14 +30,31 @@ abstract class BearSessionAuthMiddleware {
         $this->startSession(request: $request, session: $session);
         $this->userId = $session->get(key: 'logged_in_user_id');
 
+        //----------------------------------------------------------------------------------------------------------
+        //  If we cannot find a userId in the session then only progress if explicitly allowed.
+        //----------------------------------------------------------------------------------------------------------
         if ($this->userId === null && $extra !== 'allow-guest') {
             return new RedirectResponse(url: '/', headers: ['HX-Redirect' => '/']);
         }
 
+        //----------------------------------------------------------------------------------------------------------
+        //  Set the user id on the various parts of the framework which expects it.
+        //----------------------------------------------------------------------------------------------------------
         if ($this->userId !== null) {
             AuthService::setUserId(userId: $this->userId);
             Req::setUserId(userId: $this->userId);
-            $this->setLoggedInUser(userId: $this->userId);
+            if (is_callable(value: Config::get(key: 'bear-auth.call_function_on_login'), callable_name: $callableName)) {
+                $callableName($this->userId);
+            }
+            if (Config::get(key: 'bear-auth.set_user_on_auth_facade') === true) {
+                Auth::onceUsingId(id: $this->userId);
+            }
+        } else { // Clear user id, this is only needed for laravel octane.
+            AuthService::setUserId(userId: null);
+            Req::setUserId(userId: null);
+            if (is_callable(value: Config::get(key: 'bear-auth.call_function_on_logout'), callable_name: $callableName)) {
+                $callableName();
+            }
         }
 
         $response = $next($request);
@@ -66,6 +84,4 @@ abstract class BearSessionAuthMiddleware {
         }
         $this->view->share(key: 'errors', value: $request->session()->get(key: 'errors') ?? new ViewErrorBag);
     }
-
-    abstract protected function setLoggedInUser(string|int $userId): void;
 }

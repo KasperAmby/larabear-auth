@@ -18,6 +18,10 @@ class AuthService {
     }
 
     public static function setUserId(string|int|null $userId): void {
+        if (self::$userId === null) {
+            self::$permissions = null;
+            self::$roles = null;
+        }
         self::$userId = $userId;
     }
 
