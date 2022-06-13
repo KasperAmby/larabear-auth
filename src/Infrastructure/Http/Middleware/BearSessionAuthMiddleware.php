@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class BearSessionAuthMiddleware {
     public string|int|null $userId = null;
@@ -34,7 +36,11 @@ class BearSessionAuthMiddleware {
         //  If we cannot find a userId in the session then only progress if explicitly allowed.
         //----------------------------------------------------------------------------------------------------------
         if ($this->userId === null && $extra !== 'allow-guest') {
-            return new RedirectResponse(url: '/', headers: ['HX-Redirect' => '/']);
+            $target = Config::get(key: 'bear-auth.path_to_redirect_if_not_logged_in', default: '/');
+            if ($request->acceptsHtml()) {
+                return new RedirectResponse(url: $target, headers: ['HX-Redirect' => $target]);
+            }
+            return new Response(content: 'Not logged in.', status: 401, headers: ['HX-Redirect' => $target]);
         }
 
         //----------------------------------------------------------------------------------------------------------
