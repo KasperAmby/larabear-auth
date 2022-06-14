@@ -52,7 +52,7 @@ use Illuminate\Database\Query\Builder;
  * AUTO GENERATED FILE DO NOT MODIFY
  */
 class BearApplicationAccessToken extends Model {
-    protected $table = 'bear_access_token';
+    protected $table = 'bear_application_access_token';
     protected $dateFormat = 'Y-m-d H:i:sO';
     protected $keyType = 'string';
     public $incrementing = false;
