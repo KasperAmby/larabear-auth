@@ -2,6 +2,7 @@
 
 namespace GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service;
 
+use GuardsmanPanda\Larabear\Infrastructure\App\Service\BearGlobalStateService;
 use Illuminate\Support\Facades\DB;
 
 class AuthService {
@@ -9,27 +10,23 @@ class AuthService {
     private static array|null $permissions = null;
     private static array|null $roles = null;
 
-    public static function id(): string|int|null {
-        return self::$userId;
-    }
-
     public static function getUserId(): string|int|null {
-        return self::$userId;
-    }
-
-    public static function setUserId(string|int|null $userId): void {
-        if (self::$userId === null) {
-            self::$permissions = null;
-            self::$roles = null;
-        }
-        self::$userId = $userId;
+        return BearGlobalStateService::getUserId();
     }
 
 
     public static function hasPermission(string|array $permission): bool {
-        if (self::$userId === null) {
+        $global_user_id = BearGlobalStateService::getUserId();
+        if ($global_user_id === null) {
             return false;
         }
+
+        if (self::$userId !== $global_user_id) {
+            self::$userId = $global_user_id;
+            self::$permissions = null;
+            self::$roles = null;
+        }
+
         if (self::$permissions === null) {
             $perms = DB::select(query: "
                 SELECT DISTINCT p.permission_slug
@@ -58,9 +55,17 @@ class AuthService {
 
 
     public static function hasRole(string|array $role): bool {
-        if (self::$userId === null) {
+        $global_user_id = BearGlobalStateService::getUserId();
+        if ($global_user_id === null) {
             return false;
         }
+
+        if (self::$userId !== $global_user_id) {
+            self::$userId = $global_user_id;
+            self::$permissions = null;
+            self::$roles = null;
+        }
+
         if (self::$roles === null) {
             $tmp = DB::select(query: "
                     SELECT r.role_slug

@@ -4,7 +4,7 @@ namespace GuardsmanPanda\LarabearAuth\Infrastructure\Http\Middleware;
 
 use Carbon\Carbon;
 use Closure;
-use GuardsmanPanda\Larabear\Infrastructure\Http\Service\Req;
+use GuardsmanPanda\Larabear\Infrastructure\App\Service\BearGlobalStateService;
 use GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Service\AuthService;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -16,10 +16,8 @@ use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class BearSessionAuthMiddleware {
-    public string|int|null $userId = null;
     private array $config;
 
     public function __construct(private readonly SessionManager $manager, private readonly ViewFactory $view) {
@@ -30,12 +28,12 @@ class BearSessionAuthMiddleware {
         $session = $this->manager->driver();
         $session->setId($request->cookies->get(key: $this->config['cookie']));
         $this->startSession(request: $request, session: $session);
-        $this->userId = $session->get(key: 'logged_in_user_id');
+        $userId = $session->get(key: 'logged_in_user_id');
 
         //----------------------------------------------------------------------------------------------------------
         //  If we cannot find a userId in the session then only progress if explicitly allowed.
         //----------------------------------------------------------------------------------------------------------
-        if ($this->userId === null && $extra !== 'allow-guest') {
+        if ($userId === null && $extra !== 'allow-guest') {
             $target = Config::get(key: 'bear-auth.path_to_redirect_if_not_logged_in', default: '/');
             if ($request->acceptsHtml()) {
                 return new RedirectResponse(url: $target, headers: ['HX-Redirect' => $target]);
@@ -46,18 +44,15 @@ class BearSessionAuthMiddleware {
         //----------------------------------------------------------------------------------------------------------
         //  Set the user id on the various parts of the framework which expects it.
         //----------------------------------------------------------------------------------------------------------
-        if ($this->userId !== null) {
-            AuthService::setUserId(userId: $this->userId);
-            Req::setUserId(userId: $this->userId);
+        BearGlobalStateService::setUserId(userId: $userId);
+        if ($userId !== null) {
             if (is_callable(value: Config::get(key: 'bear-auth.call_function_on_login'), callable_name: $callableName)) {
-                $callableName($this->userId);
+                $callableName($userId);
             }
             if (Config::get(key: 'bear-auth.set_user_on_auth_facade') === true) {
-                Auth::onceUsingId(id: $this->userId);
+                Auth::onceUsingId(id: $userId);
             }
         } else { // Clear user id, this is only needed for laravel octane.
-            AuthService::setUserId(userId: null);
-            Req::setUserId(userId: null);
             if (is_callable(value: Config::get(key: 'bear-auth.call_function_on_logout'), callable_name: $callableName)) {
                 $callableName();
             }
