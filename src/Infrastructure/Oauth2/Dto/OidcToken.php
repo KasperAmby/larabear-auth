@@ -12,11 +12,11 @@ use Throwable;
 class OidcToken {
     public function __construct(
         public readonly string $userIdentifier,
+        public readonly string|null $name,
         public readonly string $email,
         public readonly string $issuedToClientId,
         public readonly int    $notBefore,
         public readonly int    $expiresAt,
-        public readonly string $tokenUniqueId,
     ) {}
 
     public static function fromJwt(string $jwt, string $applicationId): self {
@@ -31,7 +31,7 @@ class OidcToken {
                 );
                 throw new RuntimeException(message: "Incorrect Application ID.");
             }
-            $uniq = $stdClass->aud . ':' . $stdClass->jti;
+            $uniq = $stdClass->aud . ':' . ($stdClass->jti ?? $stdClass->uti);
             BearIdempotencyCreator::create(idempotency_key: $uniq);
         } catch (Throwable $t) { //TODO Better error log.
             BearSecurityIncidentCreator::create(
@@ -54,12 +54,12 @@ class OidcToken {
             throw new RuntimeException(message: "Incorrect Timestamp.");
         }
         return new self(
-            userIdentifier: $stdClass->sub,
+            userIdentifier: $stdClass->sub ?? $stdClass->oid,
+            name: $stdClass->name ?? null,
             email: $stdClass->email,
             issuedToClientId: $stdClass->aud,
             notBefore: $stdClass->nbf,
-            expiresAt: $stdClass->exp,
-            tokenUniqueId: $stdClass->jti,
+            expiresAt: $stdClass->exp
         );
     }
 }
