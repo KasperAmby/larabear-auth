@@ -31,7 +31,7 @@ class BearApplicationAccessTokenMiddleware {
                 AND starts_with(?, at.api_route_prefix)
         ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
 
-        //if access token is not valid, abort
+        // If access token is not valid, abort
         if ($access === null || $access->id === null) {
             $message = 'The supplied access token is not valid.. ip: ' . Req::ip() . ', country: ' . Req::ipCountry() . ', path: ' . Req::path() . ', hostname: '. Req::hostname() . ', hashed_token: ' . $hashed_access_token;
             BearSecurityIncidentCreator::create(

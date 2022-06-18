@@ -3,26 +3,13 @@
 use GuardsmanPanda\Larabear\Infrastructure\Database\Service\BearMigrationService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        $config = Config::get(key: 'bear.user_table');
-        if ($config === null) {
-            throw new RuntimeException(message: 'bear.user_table is not configured, run "php artisan bear" to fix this problem.');
-        }
-
-        Schema::create(table: 'bear_user_role', callback: static function (Blueprint $table) use ($config): void {
-            BearMigrationService::buildUserReferencingColumn(
-                table: $table,
-                columnName: 'user_id',
-                userTableName: $config['table_name'],
-                userTableColumnName: $config['primary_key_column'],
-                columnType: $config['primary_key_type'],
-                nullable: false,
-            );
+        Schema::create(table: 'bear_user_role', callback: static function (Blueprint $table): void {
+            BearMigrationService::buildUserReferencingColumn(table: $table, columnName: 'user_id', nullable: false);
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->text(column: 'role_slug');
             } else {
