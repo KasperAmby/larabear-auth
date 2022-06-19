@@ -14,7 +14,7 @@ use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class BearApplicationAccessTokenMiddleware {
+class BearAccessTokenAppMiddleware {
     private static string|null $access_token_id = null;
 
     public function handle(Request $request, Closure $next) {

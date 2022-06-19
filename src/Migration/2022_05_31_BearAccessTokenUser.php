@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create(table: 'bear_user_access_token', callback: static function (Blueprint $table) {
+        Schema::dropIfExists('bear_user_access_token');
+        Schema::create(table: 'bear_access_token_user', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
             } else {
@@ -28,6 +29,6 @@ return new class extends Migration {
     }
 
     public function down(): void {
-        Schema::dropIfExists('bear_user_access_token');
+        Schema::dropIfExists('bear_access_token_user');
     }
 };

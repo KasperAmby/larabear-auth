@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class BearUserAccessTokenMiddleware {
+class BearAccessTokenUserMiddleware {
     private static string|null $access_token_id = null;
 
     public function handle(Request $request, Closure $next) {

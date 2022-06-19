@@ -1,11 +1,11 @@
 <?php
 
-namespace GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Crud;
+namespace GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Crud;
 
 use Carbon\CarbonInterface;
-use GuardsmanPanda\LarabearAuth\Infrastructure\AccessToken\Model\BearApplicationAccessToken;
+use GuardsmanPanda\LarabearAuth\Infrastructure\Auth\Model\BearAccessTokenApp;
 
-class BearApplicationAccessTokenCreator {
+class BearAccessTokenAppCreator {
     public static function create(
         string          $access_token,
         string          $access_token_comment,
@@ -16,8 +16,8 @@ class BearApplicationAccessTokenCreator {
         CarbonInterface $expires_at = null,
         int             $delete_get_request_log_after_days = null,
         int             $delete_all_request_log_after_days = null,
-    ): BearApplicationAccessToken {
-        $token = new BearApplicationAccessToken();
+    ): BearAccessTokenApp {
+        $token = new BearAccessTokenApp();
         $token->api_route_prefix = $api_route_prefix;
         $token->api_primary_key = $api_primary_key;
         $token->hashed_access_token = hash(algo: 'xxh128', data: $access_token);
