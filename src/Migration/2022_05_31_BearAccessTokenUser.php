@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
+        Schema::dropIfExists('bear_access_token_log');
         Schema::dropIfExists('bear_user_access_token');
         Schema::create(table: 'bear_access_token_user', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
