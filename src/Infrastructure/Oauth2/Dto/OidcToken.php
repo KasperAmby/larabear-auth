@@ -4,7 +4,7 @@ namespace GuardsmanPanda\LarabearAuth\Infrastructure\Oauth2\Dto;
 
 use Carbon\Carbon;
 use GuardsmanPanda\Larabear\Enum\BearSeverityEnum;
-use GuardsmanPanda\Larabear\Infrastructure\Idempotency\Crud\BearIdempotencyCreator;
+use GuardsmanPanda\Larabear\Infrastructure\Integrity\Crud\BearIdempotencyCreator;
 use GuardsmanPanda\Larabear\Infrastructure\Security\Crud\BearSecurityIncidentCreator;
 use RuntimeException;
 use Throwable;
