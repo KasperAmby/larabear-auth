@@ -9,8 +9,8 @@ class BearAuthServiceProvider extends ServiceProvider {
         if ($this->app->runningInConsole()) {
             $this->commands(commands: [
             ]);
-            $this->publishes(paths: [__DIR__ . '/../../config/config.php' => $this->app->configPath(path: 'bear-auth.php'),], groups: 'bear-auth');
-            $this->loadMigrationsFrom(paths: [__DIR__ . '/../Migration']);
+            $this->publishes(paths: [__DIR__ . '/../../../../config/config.php' => $this->app->configPath(path: 'bear-auth.php'),], groups: 'bear-auth');
+            $this->loadMigrationsFrom(paths: [__DIR__ . '/../../../Migration']);
         }
     }
 }
