@@ -39,10 +39,11 @@ use Illuminate\Database\Query\Builder;
  * @property string $id
  * @property string $oauth2_scope
  * @property string $oauth2_client_id
- * @property string $oauth2_user_email
  * @property string $oauth2_user_identifier
  * @property string $encrypted_user_access_token
  * @property string|null $linked_user_id
+ * @property string|null $oauth2_user_email
+ * @property string|null $oauth2_user_name
  * @property string|null $token_refresh_error_message
  * @property string|null $encrypted_user_refresh_token
  * @property stdClass $oauth2_scope_jsonb

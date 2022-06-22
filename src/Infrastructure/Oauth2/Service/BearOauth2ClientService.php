@@ -6,8 +6,8 @@ use GuardsmanPanda\LarabearAuth\Infrastructure\Oauth2\Model\BearOauth2Client;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
-class Oauth2ClientService {
-    public static function exchangeCode(string $code, string $redirect_uri, BearOauth2Client $client): array {
+class BearOauth2ClientService {
+    public static function exchangeCode(string $code, BearOauth2Client $client, string $redirect_uri): array {
         $resp = Http::asForm()->post($client->oauth2_token_uri, [
             'code' => $code,
             'client_secret' => $client->encrypted_oauth2_client_secret,

@@ -11,15 +11,17 @@ return new class extends Migration {
         Schema::create(table: 'bear_oauth2_user', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
-                $table->text(column: 'oauth2_user_identifier');
-                $table->text(column: 'oauth2_user_email');
                 $table->text(column: 'oauth2_client_id');
+                $table->text(column: 'oauth2_user_identifier');
+                $table->text(column: 'oauth2_user_email')->nullable();
+                $table->text(column: 'oauth2_user_name')->nullable();
                 $table->text(column: 'oauth2_scope');
             } else {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
-                $table->string(column: 'oauth2_user_identifier');
-                $table->string(column: 'oauth2_user_email');
                 $table->string(column: 'oauth2_client_id');
+                $table->string(column: 'oauth2_user_identifier');
+                $table->string(column: 'oauth2_user_email')->nullable();
+                $table->string(column: 'oauth2_user_name')->nullable();
                 $table->string(column: 'oauth2_scope');
             }
             BearMigrationService::buildUserReferencingColumn(table: $table, columnName: 'linked_user_id');

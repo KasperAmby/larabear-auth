@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class BearAccessTokenAppMiddleware {
-    private static string|null $access_token_id = null;
 
     public function handle(Request $request, Closure $next) {
         if ($request->bearerToken() === null) {
@@ -24,11 +23,11 @@ class BearAccessTokenAppMiddleware {
         $hashed_access_token = hash(algo: 'xxh128', data: $request->bearerToken());
         $access = DB::selectOne("
             SELECT at.id, at.api_primary_key, at.expires_at
-            FROM bear_application_access_token at
+            FROM bear_access_token_app at
             WHERE
                 at.hashed_access_token = ? AND ? <<= at.request_ip_restriction
                 AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?) 
-                AND starts_with(?, at.api_route_prefix)
+                AND starts_with(?, at.route_prefix_restriction)
         ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
 
         // If access token is not valid, abort
@@ -44,22 +43,21 @@ class BearAccessTokenAppMiddleware {
             throw new AccessDeniedHttpException(message: $message);
         }
         BearGlobalStateService::setApiPrimaryKey($access->api_primary_key);
-        self::$access_token_id = $access->id;
+        BearGlobalStateService::setAccessTokenId($access->id);
         return $next($request);
     }
 
     public function terminate(Request $request, Response $response): void {
         $status_code = $response->getStatusCode();
-
         $time = -1;
         if (defined(constant_name: 'LARAVEL_START')) {
             $time = (int)((microtime(as_float: true) - get_defined_constants()['LARAVEL_START']) * 1000);
         }
 
         DB::insert("
-            INSERT INTO bear_access_token_log (request_ip, request_country_code, request_http_method, request_http_path, response_status_code, response_time_in_milliseconds, application_access_token_id)
+            INSERT INTO bear_log_access_token_usage (request_ip, request_country_code, request_http_method, request_http_path, response_status_code, response_time_in_milliseconds, access_token_app_id)
             VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), $status_code, $time, self::$access_token_id]
+            [Req::ip(), Req::ipCountry(), Req::method(), Req::path(), $status_code, $time, BearGlobalStateService::getAccessTokenId()]
         );
     }
 }
