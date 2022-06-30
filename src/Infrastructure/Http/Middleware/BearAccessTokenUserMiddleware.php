@@ -21,7 +21,6 @@ class BearAccessTokenUserMiddleware {
             FROM bear_access_token_user at
             WHERE at.hashed_access_token = ? 
         ", [$hashed_access_token]);
-
         return $next($request);
     }
 
