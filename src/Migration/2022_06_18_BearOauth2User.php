@@ -17,7 +17,7 @@ return new class extends Migration {
                 $table->text(column: 'oauth2_user_name')->nullable();
                 $table->text(column: 'oauth2_scope');
             } else {
-                $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
+                $table->uuid(column: 'id')->primary();
                 $table->string(column: 'oauth2_client_id');
                 $table->string(column: 'oauth2_user_identifier');
                 $table->string(column: 'oauth2_user_email')->nullable();
