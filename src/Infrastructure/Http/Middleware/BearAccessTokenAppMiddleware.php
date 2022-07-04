@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JsonException;
+use PDO;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -21,7 +22,9 @@ class BearAccessTokenAppMiddleware {
             throw new AccessDeniedHttpException(message: 'The request must include a bearer token.');
         }
         $hashed_access_token = hash(algo: 'xxh128', data: $request->bearerToken());
-        $access = DB::selectOne("
+
+        if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
+            $access = DB::selectOne("
             SELECT at.id, at.api_primary_key, at.expires_at
             FROM bear_access_token_app at
             WHERE
@@ -29,6 +32,16 @@ class BearAccessTokenAppMiddleware {
                 AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?) 
                 AND starts_with(?, at.route_prefix_restriction)
         ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
+        } else {
+            $access = DB::selectOne("
+            SELECT at.id, at.api_primary_key, at.expires_at
+            FROM bear_access_token_app at
+            WHERE
+                at.hashed_access_token = ? AND (at.request_ip_restriction = '0.0.0.0/0' OR at.request_ip_restriction = ?)
+                AND (at.server_hostname_restriction IS NULL OR at.server_hostname_restriction = ?) 
+                AND (? LIKE CONCAT(at.route_prefix_restriction , '%'))
+            ", [$hashed_access_token, Req::ip(), Req::hostname(), Req::path()]);
+        }
 
         // If access token is not valid, abort
         if ($access === null || $access->id === null) {
