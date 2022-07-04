@@ -9,7 +9,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create(table: 'bear_oauth2_client', callback: static function (Blueprint $table) {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
-                $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
+                $table->uuid(column: 'id')->primary();
                 $table->text(column: 'oauth2_client_slug');
                 $table->text(column: 'oauth2_client_description');
                 $table->text(column: 'oauth2_client_type');
@@ -20,7 +20,7 @@ return new class extends Migration {
                 $table->text(column: 'oauth2_token_uri');
                 $table->text(column: 'encrypted_oauth2_client_secret');
             } else {
-                $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
+                $table->uuid(column: 'id')->primary();
                 $table->string(column: 'oauth2_client_slug');
                 $table->string(column: 'oauth2_client_description');
                 $table->string(column: 'oauth2_client_type');

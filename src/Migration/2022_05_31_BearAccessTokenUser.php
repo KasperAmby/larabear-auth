@@ -14,7 +14,7 @@ return new class extends Migration {
             if (DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 $table->uuid(column: 'id')->primary()->default(DB::raw('gen_random_uuid()'));
             } else {
-                $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
+                $table->uuid(column: 'id')->primary();
             }
             BearMigrationService::buildUserReferencingColumn(table: $table, columnName: 'user_id', nullable: false);
             $table->timestampTz(column: 'expires_at');

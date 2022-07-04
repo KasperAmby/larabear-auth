@@ -16,7 +16,7 @@ return new class extends Migration {
                 $table->text(column: 'route_prefix_restriction')->default('');
                 $table->text(column: 'server_hostname_restriction')->nullable();
             } else {
-                $table->uuid(column: 'id')->primary()->default(DB::raw('uuid()'));
+                $table->uuid(column: 'id')->primary();
                 $table->string(column: 'api_primary_key')->nullable();
                 $table->string(column: 'route_prefix_restriction')->default('');
                 $table->string(column: 'server_hostname_restriction')->nullable();
