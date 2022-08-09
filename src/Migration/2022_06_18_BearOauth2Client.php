@@ -35,7 +35,7 @@ return new class extends Migration {
             $table->timestampTz(column: 'oauth2_client_access_token_expires_at')->nullable();
             $table->text(column: 'encrypted_oauth2_client_access_token')->nullable();
             $table->timestampTz(column: 'created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestampTz(column: 'updated_at')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrentOnUpdate();
+            $table->timestampTz(column: 'updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
