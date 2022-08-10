@@ -15,8 +15,8 @@ class BearAccessTokenAppCreator {
         string          $server_hostname_restriction = null,
         string          $request_ip_restriction = '0.0.0.0/0',
         CarbonInterface $expires_at = null,
-        int             $delete_get_request_log_after_days = null,
-        int             $delete_all_request_log_after_days = null,
+        int             $delete_get_request_log_after_days = 40,
+        int             $delete_all_request_log_after_days = 400,
     ): BearAccessTokenApp {
         $token = new BearAccessTokenApp();
         $token->id = Str::uuid()->toString();

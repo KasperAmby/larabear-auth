@@ -46,7 +46,6 @@ use Illuminate\Database\Query\Builder;
  * AUTO GENERATED FILE DO NOT MODIFY
  */
 class BearAccessTokenUser extends Model {
-    protected $connection = 'pgsql';
     protected $table = 'bear_access_token_user';
     protected $keyType = 'string';
     public $incrementing = false;

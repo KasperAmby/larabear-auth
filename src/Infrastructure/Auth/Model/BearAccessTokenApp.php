@@ -53,7 +53,6 @@ use Illuminate\Database\Query\Builder;
  * AUTO GENERATED FILE DO NOT MODIFY
  */
 class BearAccessTokenApp extends Model {
-    protected $connection = 'pgsql';
     protected $table = 'bear_access_token_app';
     protected $keyType = 'string';
     public $incrementing = false;
